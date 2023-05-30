@@ -1,11 +1,12 @@
 import time
 
-if __name__ == '__main__':
+
+def calcular_notas() -> dict:
     inicio_total = time.perf_counter()
-    inicio_es = time.perf_counter()
+    inicio_entrada = time.perf_counter()
     with open("notas.csv", "r") as f:
         contenido = f.read()
-    fin_es = time.perf_counter()
+    fin_entrada = time.perf_counter()
     
     inicio_cpu = time.perf_counter()
     filas = contenido.split("\n")
@@ -37,9 +38,52 @@ if __name__ == '__main__':
         notas_finales.append([fila[0], nota_final])
     fin_cpu = time.perf_counter()
 
+    inicio_salida = time.perf_counter()
     print(notas_finales)
+    fin_salida = time.perf_counter()
     fin_total = time.perf_counter()
 
-    print(f"Tiempo total de operaciones E/S: {fin_es - inicio_es} segundos")
-    print(f"Tiempo total de CPU: {fin_cpu - inicio_cpu} segundos")
-    print(f"Tiempo total de ejecucion: {fin_total - inicio_total} segundos")
+    tiempo_total = fin_total - inicio_total
+    tiempo_cpu = fin_cpu - inicio_cpu
+    tiempo_entrada = fin_entrada - inicio_entrada
+    tiempo_salida = fin_salida - inicio_salida
+    tiempo_es = tiempo_entrada + tiempo_salida
+
+    tiempo_dict = {
+        "tiempo_total": tiempo_total,
+        "tiempo_cpu": tiempo_cpu,
+        "tiempo_entrada": tiempo_entrada,
+        "tiempo_salida": tiempo_salida,
+        "tiempo_es": tiempo_es
+    }
+
+    return tiempo_dict
+
+
+if __name__ == '__main__':
+    total_list = list()
+    cpu_list = list()
+    entrada_list = list()
+    salida_list = list()
+    es_list = list()
+
+    for _ in range(10):
+        res = calcular_notas()
+        total_list.append(res["tiempo_total"])
+        cpu_list.append(res["tiempo_cpu"])
+        entrada_list.append(res["tiempo_entrada"])
+        salida_list.append(res["tiempo_salida"])
+        es_list.append(res["tiempo_es"])
+
+    total_list.sort()
+    cpu_list.sort()
+    entrada_list.sort()
+    salida_list.sort()
+    es_list.sort()
+
+    print("************************************************************")
+    print(f"Mediana de tiempo total de ejecucion: {total_list[len(total_list) // 2]}")
+    print(f"Mediana de tiempo de cpu: {cpu_list[len(cpu_list) // 2]}")
+    print(f"Mediana de tiempo de entrada: {entrada_list[len(entrada_list) // 2]}")
+    print(f"Mediana de tiempo de salida: {salida_list[len(salida_list) // 2]}")
+    print(f"Mediana de tiempo de E/S: {es_list[len(es_list) // 2]}")
