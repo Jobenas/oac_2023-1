@@ -6,11 +6,11 @@ SOCK_BUFFER = 1024
 if __name__ == '__main__':
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    server_address = ("0.0.0.0", 5000)
+    server_address = ("localhost", 5000)
     print(f"Iniciando en servidor {server_address[0]} en el puerto {server_address[1]}")
     sock.bind(server_address)
 
-    sock.listen(5)
+    sock.listen(1)
 
     while True:
         print("Esperando conexion...")
